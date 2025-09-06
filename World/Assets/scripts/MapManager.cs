@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System;
 using System.Drawing;
 using UnityEngine;
 
@@ -59,32 +61,37 @@ public class MapManager : MonoBehaviour
     }
     private void Start()
     {
-        CurrentUnit = WorldUnit.GetWorldUnit(new Vector2Int(0, 0));
-        //TileManager.PrintTileMap(CurrentUnit.TileMap, CurrentUnit.Coord);
-        
-    }
-    private void Update()
-    {
-      //  CheckOffset(new Vector2(x,u)); 
-     //  RiverMapCharac = new MapCharcteristics(river_seed, river_scale, river_octaves, river_persistence, river_lacunarity);
-        if (PlayerTrans.position.x <= CurrentUnit.Coord.x * TileMapWidth)
-            offset.x = -1;
-        if (PlayerTrans.position.x >= (CurrentUnit.Coord.x + 1) * TileMapWidth )
-            offset.x = 1;
-        if (PlayerTrans.position.y <= CurrentUnit.Coord.y * TileMapWidth)
-            offset.y = -1;
-        if (PlayerTrans.position.y >= (CurrentUnit.Coord.y + 1) * TileMapWidth)
-            offset.y = 1;
-        if (offset != new Vector2Int(0, 0))
-        {
-            CurrentUnit = WorldUnit.GetWorldUnit(CurrentUnit.Coord + offset);
-            TileManager.PrintTileMap(CurrentUnit.TileMap, CurrentUnit.Coord);
-            //WorldUnit.ClearFarUnits(CurrentUnit.Coord);
-            offset.x = 0;
-            offset.y = 0;
-        }
+        CurrentUnit = null; // WorldUnit.GetWorldUnit(new Vector2Int(0, 0));
+        // TileManager.PrintWorldUnit(CurrentUnit);
+       
 
     }
+    //private void Update()
+    //{
+    //    //  CheckOffset(new Vector2(x,u)); 
+    //    //  RiverMapCharac = new MapCharcteristics(river_seed, river_scale, river_octaves, river_persistence, river_lacunarity);
+    //    if (PlayerTrans.position.x <= CurrentUnit.Coord.x * TileMapWidth)
+    //        offset.x = -1;
+    //    if (PlayerTrans.position.x >= (CurrentUnit.Coord.x + 1) * TileMapWidth )
+    //        offset.x = 1;
+    //    if (PlayerTrans.position.y <= CurrentUnit.Coord.y * TileMapWidth)
+    //        offset.y = -1;
+    //    if (PlayerTrans.position.y >= (CurrentUnit.Coord.y + 1) * TileMapWidth)
+    //        offset.y = 1;
+    //    if (offset != new Vector2Int(0, 0))
+    //    {
+    //        CurrentUnit = WorldUnit.GetWorldUnit(CurrentUnit.Coord + offset);
+    //        if (!CurrentUnit.IsActive)
+    //            TileManager.PrintWorldUnit(CurrentUnit);
+    //        //Stopwatch stopwatch = Stopwatch.StartNew();
+    //        //stopwatch.Stop();
+    //       // UnityEngine.Debug.Log("SetTile " + stopwatch.ElapsedMilliseconds);
+    //        WorldUnit.ClearFarUnits(CurrentUnit.Coord);
+    //        offset.x = 0;
+    //        offset.y = 0;
+    //    }
+
+    //}
     private void SetConst()
     {
         mp = GetComponent<MapRender>();
@@ -120,10 +127,10 @@ public class MapManager : MonoBehaviour
        // BiomMap.floatArray = MapGenerator.Generate(BiomMap.width, BiomMapCharac, Coord * OffsetBiom);
         MainMap.floatArray = MapGenerator.Generate(MainMap.width, MainMapCharac, Coord * OffsetConst);
         float[] RiverMap = MapGenerator.Generate(MainMap.width, RiverMapCharac, Coord * OffsetRiver);
-        float[][] BiomMaps = new float[3][];
+        float[][] BiomMaps = new float[2][];
         BiomMaps[0] = MapGenerator.Generate(BiomMap.width, UsualMapCharac, Coord * OffsetBiom);
         BiomMaps[1] = MapGenerator.Generate(BiomMap.width, AtlanticMapCharac, Coord * OffsetBiom);
-        BiomMaps[2] = MapGenerator.Generate(BiomMap.width, BloodMapCharac, Coord * OffsetBiom);
+       // BiomMaps[2] = MapGenerator.Generate(BiomMap.width, BloodMapCharac, Coord * OffsetBiom);
         MapGenerator.UniteMainWidthRiver(MainMap.floatArray, RiverMap);
         BiomMap.floatArray = MapGenerator.UniteBioms(BiomMap.width, BiomMaps);
 

@@ -1,0 +1,4 @@
+#Thu Aug 14 22:37:51 MSK 2025
+base.0=D\:\\hunger\\World\\Library\\Bee\\Android\\Prj\\Mono2x\\Gradle\\launcher\\build\\intermediates\\dex\\release\\mergeDexRelease\\classes.dex
+renamed.0=classes.dex
+path.0=classes.dex

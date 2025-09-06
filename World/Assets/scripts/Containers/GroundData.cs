@@ -1,24 +1,15 @@
 using UnityEngine.Tilemaps;
+using UnityEngine;
 
 public class GroundData
 {
-    public Tilemap tilemap;
-    public TileBase tile;
+    public Tilemap Tilemap;
+    public TileType TileType;
 
-    public Tilemap TransitionTilemap;
-    public TileBase TransitionTile;
+    public TileBase Tile;
+    public Color States3;
+
+ 
     public GroundData() { }
-    public GroundData(TileBase _tile, Tilemap _tilemap)
-    {
-        tile = _tile;
-        tilemap = _tilemap;
-    }
-    public GroundData(TileBase _tile, Tilemap _tilemap, TileBase _TransitionTile, Tilemap _TransitionTilemap)
-    {
-        tile = _tile;
-        tilemap = _tilemap;
-        TransitionTilemap = _TransitionTilemap;
-        TransitionTile = _TransitionTile;
-    }
-
+   
 }

@@ -16,8 +16,6 @@ public enum TileForm
     Wall_Right, Wall_Left, Wall_Top, Wall_Bottom,
     Corner_RightBottom, Corner_RightTop, Corner_LeftBottom, Corner_LeftTop,
     Hall_RightBottom, Hall_RightTop, Hall_LeftBottom, Hall_LeftTop,
-
-
 }
 
 public enum BiomType

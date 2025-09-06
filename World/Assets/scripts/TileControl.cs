@@ -63,7 +63,7 @@ public static class TileControl
         rules[7] = new Rule(WallTop_Path, TileForm.Wall_Top);
         rules[8] = new Rule(WallBottom_Path, TileForm.Wall_Bottom);
 
-        Rule[] Transitrules = new Rule[11];
+        Rule[] Transitrules = new Rule[12];
         bool[] TransitCornerLeftBottom_Path = { true, true, true, true, true, true, true, false };
         bool[] TransitCornerLeftTop_Path = { true, true, true, true, true, true, false };
         bool[] TransitCornerRightBottom_Path = { true, true, true, true, false };
@@ -96,9 +96,8 @@ public static class TileControl
     public static GroundData GetCorrectTiles(TileType[] neighbors, BiomType[] bioms)
     {
         GroundData OutData = new GroundData();
-        GroundBase transitionGround = new GroundBase();
         BiomType transitBiom = new BiomType();
-        GroundBase ground = GetGroundBase(neighbors[4], ref transitionGround);
+        GroundBase ground = GetGroundBase(neighbors[4]);
         TileForm TileForm = new TileForm();
         TileForm TransitionForm = new TileForm();
         if (neighbors[4] == TileType.water)
@@ -106,25 +105,25 @@ public static class TileControl
         else
             TileForm = GetRule(neighbors, RuleGraph);
         TransitionForm = GetRule(bioms, transitRuleGragh, ref transitBiom);
-        OutData.tile = ground.GetTile(TileForm, bioms[4]);
-        OutData.TransitionTile = transitionGround.GetTile(TransitionForm, transitBiom);
-        OutData.tilemap = ground.tilemap;
-        OutData.TransitionTilemap = transitionGround.tilemap;
+
+        OutData.Tile = ground.GetTile(TileForm, bioms[4]);
+        OutData.States3.r = ground.GetRedState(bioms[4]);
+        OutData.States3.g = ground.GetGreenState(TransitionForm, transitBiom);
+        OutData.States3.a = 1;
+        OutData.Tilemap = ground.tilemap;
+        OutData.TileType = neighbors[4];
         return OutData;
     }
  
-    private static GroundBase GetGroundBase(TileType ground, ref GroundBase transitionGround)
+    private static GroundBase GetGroundBase(TileType ground)
     {
         switch (ground)
         {
             case TileType.water:
-                transitionGround = TilePallet.TransitWater;
                 return TilePallet.Water;
             case TileType.sand:
-                transitionGround = TilePallet.TransitSand;
                 return TilePallet.Sand;
             case TileType.earth:
-                transitionGround = TilePallet.TransitEarth;
                 return TilePallet.Earth;
             default:
                 return null;
@@ -135,7 +134,7 @@ public static class TileControl
         byte i = 0;
         RuleGraph Currentgraph = rules;
         TileForm TileForm = new TileForm();
-        while (Currentgraph != null && i < 8)
+        while (Currentgraph != null && i < order.Length)
         {
             if (neighbors[order[i]] >= neighbors[4])
                 Currentgraph = Currentgraph.one;
@@ -147,22 +146,34 @@ public static class TileControl
         }
         return TileForm;
     }
+    //public static void CheckBiomRules()
+    //{
+    //    BiomType[] neighbors =
+    //    {
+    //        BiomType.usual, BiomType.usual, BiomType.usual,
+    //        BiomType.atlantic, BiomType.atlantic, BiomType.usual,
+    //        BiomType.atlantic, BiomType.atlantic, BiomType.usual
+    //    };
+    //    BiomType transit = new BiomType();
+    //    Debug.Log(GetRule(neighbors, transitRuleGragh, ref transit) + " " + transit);
+
+    //}
     private static TileForm GetRule(BiomType[] neighbors, RuleGraph rules, ref BiomType transitBiom)
     {
         byte i = 0;
         RuleGraph Currentgraph = rules;
         TileForm TileForm = new TileForm();
-        while (Currentgraph != null && i < 11)
+        while (Currentgraph != null && i < order.Length)
         {
-            if (neighbors[order[i]] >= neighbors[4])
+            if (neighbors[order[i]] <= neighbors[4])
                 Currentgraph = Currentgraph.one;
             else
-                Currentgraph = Currentgraph.zero;
-            if (Currentgraph != null)
             {
-                transitBiom = neighbors[i];
-                TileForm = Currentgraph.rule;
+                transitBiom = neighbors[order[i]];
+                Currentgraph = Currentgraph.zero;
             }
+            if (Currentgraph != null)
+                TileForm = Currentgraph.rule;
             i++;
         }
         return TileForm;
